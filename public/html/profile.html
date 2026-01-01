@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Profile</title>
+    <meta charset="UTF-8">
+    <meta name="author" content="Marko Bošnjak">
+    <meta name="description" content="{{ APPLICATION_NAME }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/layouts.css">
+  </head>
+  <body>
+    <div class="container">
+      {{ sidebar }}
+      <main class="content">
+        <h1 class="center">Profile</h1>
+        <form id="profileForm" class="form" autocomplete="off" novalidate>
+          <div id="banner" class="banner" role="alert">
+            <span id="bannerText"></span>
+            <button type="button" id="bannerHide" class="close" aria-label="Close">&times;</button>
+          </div>
+          <label htmlFor="avatar" class="avatar">
+            <img id="preview" src="{{ user.avatar.src }}" alt="{{ user.avatar.name }}" title="{{ user.avatar.name }}" class="image">
+            <input type="file" id="avatar" accept="image/png, image/jpg, image/jpeg" class="none">
+          </label>
+          <div class="label">Username<span class="required">*</span></div>
+          <div class="inputGroup">
+            <div class="description"><img src="../images/username.png"></div>
+            <input type="text" id="username" class="input borders" value="{{ user.username }}" placeholder="Type here..." disabled>
+          </div>
+          <div class="label">First name<span class="required">*</span></div>
+          <div class="inputGroup">
+            <div class="description"><img src="../images/name.png"></div>
+            <input type="text" id="firstName" class="input borders" value="{{ user.firstName }}" placeholder="Type here...">
+          </div>
+          <div class="label">Last name<span class="required">*</span></div>
+          <div class="inputGroup">
+            <div class="description"><img src="../images/name.png"></div>
+            <input type="text" id="lastName" class="input borders" value="{{ user.lastName }}" placeholder="Type here...">
+          </div>
+          <div class="label">Email<span class="required">*</span></div>
+          <div class="inputGroup">
+            <div class="description"><img src="../images/email.png"></div>
+            <input type="email" id="email" class="input borders" value="{{ user.email }}" placeholder="Type here...">
+          </div>
+          <div class="label">Telephone<span class="required">*</span></div>
+          <div class="inputGroup">
+            <div class="description"><img src="../images/telephone.png"></div>
+            <input type="tel" id="telephone" class="input borders" value="{{ user.telephone }}" placeholder="Type here...">
+          </div>
+          <div class="label">Birthday<span class="required">*</span></div>
+          <div class="inputGroup">
+            <div class="description"><img src="../images/birthday.png"></div>
+            <input type="date" id="birthday" class="input borders" value="{{ user.birthday }}">
+          </div>
+          <div class="label">Address<span class="required">*</span></div>
+          <div class="inputGroup">
+            <div class="description"><img src="../images/address.png"></div>
+            <input type="text" id="address" class="input borders" value="{{ user.address }}" placeholder="Type here...">
+          </div>
+          <div class="label">Address DE<span class="required">*</span></div>
+          <div class="inputGroup">
+            <div class="description"><img src="../images/address.png"></div>
+            <input type="text" id="address_de" class="input borders" value="{{ user.address_de }}" placeholder="Type here...">
+          </div>
+          <div class="label">Languages<span class="required">*</span></div>
+          <div class="inputGroup">
+            <div class="description"><img src="../images/language.png"></div>
+            <input type="text" id="languages" class="input borders" value="{{ user.languages }}" placeholder="Type here...">
+          </div>
+          <div class="label">Languages DE<span class="required">*</span></div>
+          <div class="inputGroup">
+            <div class="description"><img src="../images/language.png"></div>
+            <input type="text" id="languages_de" class="input borders" value="{{ user.languages_de }}" placeholder="Type here...">
+          </div>
+          <div class="label">Profession<span class="required">*</span></div>
+          <div class="inputGroup">
+            <div class="description"><img src="../images/profession.png"></div>
+            <input type="text" id="profession" class="input borders" value="{{ user.profession }}" placeholder="Type here...">
+          </div>
+          <div class="label">Profession DE<span class="required">*</span></div>
+          <div class="inputGroup">
+            <div class="description"><img src="../images/profession.png"></div>
+            <input type="text" id="profession_de" class="input borders" value="{{ user.profession_de }}" placeholder="Type here...">
+          </div>
+          <div class="label">GitHub<span class="required">*</span></div>
+          <div class="inputGroup">
+            <div class="description"><img src="../images/gitHub.png"></div>
+            <input type="url" id="gitHub" class="input borders" value="{{ user.gitHub }}" placeholder="Type here...">
+          </div>
+          <div class="right"><button type="submit" id="profileButton" class="button" disabled>Save</button></div>
+        </form>
+      </main>
+    </div>
+  </body>
+  <script type="module" src="../js/profile.js"></script>
+  <script type="module" src="../js/sidebar.js"></script>
+</html>

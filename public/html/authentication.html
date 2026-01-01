@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Authentication</title>
+    <meta charset="UTF-8">
+    <meta name="author" content="Marko Bošnjak">
+    <meta name="description" content="{{ APPLICATION_NAME }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://www.google.com/recaptcha/api.js?render={{ RECAPTCHA_ID }}" async defer></script>
+    <link rel="stylesheet" href="../css/layouts.css">
+  </head>
+  <body>
+    <h1 class="center">Authentication</h1>
+    <form id="authenticationForm" class="form" autocomplete="off" novalidate>
+      <div id="banner" class="banner" role="alert">
+        <span id="bannerText"></span>
+        <button type="button" id="bannerHide" class="close" aria-label="Close">&times;</button>
+      </div>
+      <div class="label">Token<span class="required">*</span></div>
+      <div class="inputGroup">
+        <div class="description"><img src="../images/token.png"></div>
+        <input type="text" id="token" maxlength="6" class="input borders" value="" placeholder="Enter the token...">
+      </div>
+      <div class="right"><button type="submit" id="authenticationButton" class="button" disabled>Login</button></div>
+    </form>
+  </body>
+  <script type="module" src="../js/authentication.js"></script>
+</html>

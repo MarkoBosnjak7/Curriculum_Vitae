@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Contacts</title>
+    <meta charset="UTF-8">
+    <meta name="author" content="Marko Bošnjak">
+    <meta name="description" content="{{ APPLICATION_NAME }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/layouts.css">
+  </head>
+  <body>
+    <div class="container">
+      {{ sidebar }}
+      <main class="content">
+        <h1 class="center">Contacts</h1>
+        <div class="totalWrapper"><span class="total">Total: <span id="total">{{ total }}</span></span></div>
+        <div class="tableWrapper contacts">
+          <table id="contactsTable">
+            <colgroup>
+              <col class="text">
+              <col class="text">
+              <col class="text">
+              <col class="text">
+              <col class="language">
+              <col class="date">
+              <col class="actions">
+            </colgroup>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Subject</th>
+                <th>Message</th>
+                <th>Language</th>
+                <th>Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{ #for items }}
+                <tr id="contact_{{ _id }}">
+                  <td>{{ name }}</td>
+                  <td><a href="mailto:{{ email }}?subject={{ #if isGerman }}Rückmeldung{{ #else }}Feedback{{ #/if }}">{{ email }}</a></td>
+                  <td>{{ subject }}</td>
+                  <td>{{ message }}</td>
+                  <td><img src="../images/{{ #if isGerman }}german{{ #else }}usa{{ #/if }}Flag.png" alt="{{ #if isGerman }}German{{ #else }}USA{{ #/if }} flag" title="{{ #if isGerman }}German{{ #else }}English{{ #/if }}" class="language"></td>
+                  <td>{{ timestamp }}</td>
+                  <td>
+                    <img src="../images/view.png" alt="View" title="View" class="action view" data-id="{{ _id }}">
+                    <img src="../images/telephone.png" alt="Answer" title="{{ #if isAnswered }}Answered{{ #else }}Unanswered{{ #/if }}" class="action answer {{ #if isAnswered }}answered{{ #else }}unanswered{{ #/if }}" data-id="{{ _id }}" data-answer="{{ isAnswered }}">
+                    <img src="../images/delete.png" alt="Delete" title="Delete" class="action delete" data-id="{{ _id }}">
+                  </td>
+                </tr>
+              {{ #/for }}
+            </tbody>
+          </table>
+        </div>
+        <div id="overlay" class="overlay">
+          <div class="dialog">
+            <h2 class="dialogTitle"><span class="dialogTitleText">View</span><span class="closeDialog dialogTitleClose">&times;</span></h2>
+              <input type="hidden" id="id" value="">
+              <input type="hidden" id="answer" value="">
+              <div class="contact">
+                <div class="detail"><span class="description"><img src="../images/name.png">Name: </span><span id="name" class="value"></span></div>
+                <div class="detail"><span class="description"><img src="../images/email.png">Email: </span><span id="email" class="value"></span></div>
+                <div class="detail"><span class="description"><img src="../images/subject.png">Subject: </span><span id="subject" class="value"></span></div>
+                <div class="detail"><span class="description"><img src="../images/message.png">Message: </span><span id="message" class="value"></span></div>
+                <div class="detail"><span class="description"><img src="../images/language.png">Language: </span><img id="language" src="" alt="" title=""></div>
+                <div class="detail"><span class="description"><img src="../images/date.png">Date: </span><span id="date" class="value"></span></div>
+              </div>
+              <div class="buttons right">
+                <button type="button" class="button closeDialog">Close</button>
+                <button type="button" id="answerButton" class="button"></button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div id="toast">
+          <div class="toast">
+            <span id="toastText"></span>
+            <span id="toastHide" class="close">&times;</span>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+  <script type="module" src="../js/contacts.js"></script>
+  <script type="module" src="../js/sidebar.js"></script>
+</html>

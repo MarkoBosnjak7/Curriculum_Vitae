@@ -1,0 +1,19 @@
+{
+  "name": "curriculum_vitae",
+  "version": "1.0.0",
+  "author": "Marko Bošnjak",
+  "description": "Curriculum Vitae",
+  "license": "ISC",
+  "type": "module",
+  "scripts": {
+    "development": "nodemon --env-file=.env application.js",
+    "build": "npm install",
+    "start": "node application.js"
+  },
+  "dependencies": {
+    "mongodb": "^7.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
+  }
+}

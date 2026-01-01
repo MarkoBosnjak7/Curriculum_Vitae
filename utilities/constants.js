@@ -1,0 +1,11 @@
+export const COOKIE_SESSION_TOKEN = "SESSION_TOKEN";
+export const SESSION_TOKEN_EXPIRATION_TIME = 2;
+export const ALGORITHM_TYPE = "sha1";
+export const DIGITS_SIZE = 6;
+export const PERIOD_TIME = 30;
+export const DATE_FORMAT = { year: "numeric", month: "2-digit", day: "2-digit" };
+export const DATE_TIME_FORMAT = { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" };
+export const INVALID_ITEM_ID_MESSAGE = "Invalid item ID.";
+export const UNAUTHORIZED_MESSAGE = "Unauthorized.";
+export const ERROR_MESSAGE = "Something went wrong. Please try again.";
+export const ERROR_MESSAGE_DE = "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.";

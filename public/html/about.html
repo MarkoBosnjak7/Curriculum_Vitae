@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="{{ #if isGerman }}de{{ #else }}en{{ #/if }}">
+  <head>
+    <title>{{ TITLE }}</title>
+    <meta charset="UTF-8">
+    <meta name="author" content="Marko Bošnjak">
+    <meta name="description" content="{{ APPLICATION_NAME }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://www.google.com/recaptcha/api.js?render={{ RECAPTCHA_ID }}" async defer></script>
+    <link rel="stylesheet" href="../css/about.css">
+  </head>
+  <body>
+    <nav class="navigation">
+      <ul id="links">
+        <li><span class="link" data-section="profile">{{ #if isGerman }}Über mich{{ #else }}About{{ #/if }}</span></li>
+        <li><span class="link" data-section="skills">{{ #if isGerman }}Fähigkeiten{{ #else }}Skills{{ #/if }}</span></li>
+        <li><span class="link" data-section="resume">{{ #if isGerman }}Lebenslauf{{ #else }}Resume{{ #/if }}</span></li>
+        <li><span class="link" data-section="portfolio">Portfolio</span></li>
+        <li><span class="link" data-section="certifications">{{ #if isGerman }}Zertifizierungen{{ #else }}Certifications{{ #/if }}</span></li>
+        <li><span class="link" data-section="contact">{{ #if isGerman }}Kontakt{{ #else }}Contact{{ #/if }}</span></li>
+        <li><span><a href="/?language={{ #if isGerman }}en{{ #else }}de{{ #/if }}"><img src="../images/{{ #if isGerman }}usa{{ #else }}german{{ #/if }}Flag.png" alt="{{ #if isGerman }}USA{{ #else }}German{{ #/if }} flag"></a></span></li>
+      </ul>
+      <div id="burger">☰</div>
+    </nav>
+    <section id="profile">
+      <div class="header">
+        <div class="text">
+          <div class="content">
+            <div>{{ #if isGerman }}Hallo! Ich bin{{ #else }}Hello! I am{{ #/if }}</div>
+            <div class="name">{{ user.firstName }} {{ user.lastName }}</div>
+            <div class="profession">{{ #if isGerman }}{{ user.profession_de }}{{ #else }}{{ user.profession }}{{ #/if }}</div>
+            <div>Full Stack Web Developer</div>
+            <div>Atlassian Certified Expert</div>
+            <div>DPS Innovation Award 2025</div>
+            <div><a href="{{ user.gitHub }}" target="_blank"><img src="../images/repository.png" alt="GitHub" title="GitHub"></a></div>
+          </div>
+        </div>
+        <div class="image">
+          <img src="{{ user.avatar.src }}" alt="{{ user.avatar.name }}">
+        </div>
+      </div>
+    </section>
+    <section id="skills">
+      <h1>{{ #if isGerman }}Fähigkeiten{{ #else }}Skills{{ #/if }}</h1>
+      <div class="gallery">
+        <div class="column">
+          <h3 class="title">{{ #if isGerman }}Sprachen{{ #else }}Languages{{ #/if }}</h3>
+          {{ #for skills.languages }}
+            <div class="item">
+              <img src="{{ logo.src }}" alt="{{ logo.name }}">
+              <p>{{ title }}</p>
+            </div>
+          {{ #/for }}
+        </div>
+        <div class="column">
+          <h3 class="title">Frameworks</h3>
+          {{ #for skills.frameworks }}
+            <div class="item">
+              <img src="{{ logo.src }}" alt="{{ logo.name }}">
+              <p>{{ title }}</p>
+            </div>
+          {{ #/for }}
+        </div>
+        <div class="column">
+          <h3 class="title">{{ #if isGerman }}Technologien{{ #else }}Technologies{{ #/if }}</h3>
+          {{ #for skills.technologies }}
+            <div class="item">
+              <img src="{{ logo.src }}" alt="{{ logo.name }}">
+              <p>{{ title }}</p>
+            </div>
+          {{ #/for }}
+        </div>
+      </div>
+    </section>
+    <section id="resume">
+      <h1>{{ #if isGerman }}Lebenslauf{{ #else }}Resume{{ #/if }}</h1>
+      <div class="timeline">
+        {{ #for resume }}
+          <div class="item">
+            <div class="dot"><img src="../images/{{ type }}.png" alt="{{ type }}.png"></div>
+            <div class="content">
+              <span class="year">{{ #if isGerman }}{{ duration_de }}{{ #else }}{{ duration }}{{ #/if }}</span>
+              <h3>{{ #if isGerman }}{{ title_de }}{{ #else }}{{ title }}{{ #/if }} <span class="divider">-</span> {{ workplace }}</h3>
+              <p>{{ #if isGerman }}{{ description_de }}{{ #else }}{{ description }}{{ #/if }}</p>
+            </div>
+          </div>
+        {{ #/for }}
+      </div>
+    </section>
+    <section id="portfolio">
+      <h1>Portfolio</h1>
+      <div class="cards">
+        {{ #for portfolio }}
+          <div class="card">
+            <a href="{{ link }}" target="_blank" class="{{ class }}">
+              <img src="{{ logo.src }}" alt="{{ logo.name }}">
+            </a>
+            <div class="text">
+              <h3>{{ title }}</h3>
+              <span>
+                {{ #if isGerman && (type === "Work") }}Arbeitsprojekt{{ #/if }}
+                {{ #if isGerman && (type === "Personal") }}Persönliches Projekt{{ #/if }}
+                {{ #if isGerman && (type === "Academic") }}Akademisches Projekt{{ #/if }}
+                {{ #if !isGerman }}{{ type }} project{{ #/if }}
+              </span>
+            </div>
+          </div>
+        {{ #/for }}
+      </div>
+    </section>
+    <section id="certifications">
+      <h1>{{ #if isGerman }}Zertifizierungen{{ #else }}Certifications{{ #/if }}</h1>
+      <div class="cards">
+        {{ #for certifications }}
+          <div class="card">
+            <img src="{{ logo.src }}" alt="{{ logo.name }}">
+            <div class="text">
+              <h3>{{ title }}</h3>
+            </div>
+          </div>
+        {{ #/for }}
+      </div>
+    </section>
+    <section id="contact">
+      <h1>{{ #if isGerman }}Kontakt{{ #else }}Contact{{ #/if }}</h1>
+      <div class="contact">
+        <div class="information">
+          <p>{{ #if isGerman }}Geburtstag{{ #else }}Birthday{{ #/if }}: <span>{{ user.birthday }}</span></p>
+          <p>{{ #if isGerman }}E-Mail{{ #else }}Email{{ #/if }}: <span><a href="mailto:{{ user.email }}">{{ user.email }}</a></span></p>
+          <p>{{ #if isGerman }}Telefon{{ #else }}Telephone{{ #/if }}: <span><a href="tel:{{ user.telephone }}">{{ user.telephone }}</a></span></p>
+          <p>{{ #if isGerman }}Adresse{{ #else }}Address{{ #/if }}: <span><a href="https://maps.google.com/?q={{ #if isGerman }}{{ user.address_de }}{{ #else }}{{ user.address }}{{ #/if }}" target="_blank">{{ #if isGerman }}{{ user.address_de }}{{ #else }}{{ user.address }}{{ #/if }}</a></span></p>
+          <p>{{ #if isGerman }}Sprachen{{ #else }}Languages{{ #/if }}: <span>{{ #if isGerman }}{{ user.languages_de }}{{ #else }}{{ user.languages }}{{ #/if }}</span></p>
+          <p><button type="button" id="downloadButton" data-language="{{ #if isGerman }}de{{ #else }}en{{ #/if }}">{{ #if isGerman }}PDF herunterladen{{ #else }}Download PDF{{ #/if }}</button></p>
+        </div>
+        <form id="contactForm" autocomplete="off" novalidate>
+          <div id="banner" class="banner" role="alert">
+            <span id="bannerText"></span>
+            <button type="button" id="bannerHide" class="close" aria-label="Close">&times;</button>
+          </div>
+          <input type="hidden" id="isGerman" value="{{ isGerman }}">
+          <label for="name">Name</label>
+          <input type="text" id="name" class="contactInput" value="">
+          <label for="email">{{ #if isGerman }}E-Mail{{ #else }}Email{{ #/if }}</label>
+          <input type="email" id="email" class="contactInput" value="">
+          <label for="subject">{{ #if isGerman }}Thema{{ #else }}Subject{{ #/if }}</label>
+          <input type="text" id="subject" class="contactInput" value="">
+          <label for="message">{{ #if isGerman }}Nachricht{{ #else }}Message{{ #/if }}</label>
+          <textarea id="message" class="contactInput"></textarea>
+          <button type="submit" id="contactButton" disabled>{{ #if isGerman }}Senden{{ #else }}Submit{{ #/if }}</button>
+        </form>
+      </div>
+    </section>
+    <footer id="footer">
+      <p>© {{ year }} {{ user.firstName }} {{ user.lastName }}. {{ #if isGerman }}Alle Rechte vorbehalten.{{ #else }}All rights reserved.{{ #/if }}</p>
+    </footer>
+  </body>
+  <script type="module" src="../js/about.js"></script>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Skills</title>
+    <meta charset="UTF-8">
+    <meta name="author" content="Marko Bošnjak">
+    <meta name="description" content="{{ APPLICATION_NAME }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/layouts.css">
+  </head>
+  <body>
+    <div class="container">
+      {{ sidebar }}
+      <main class="content">
+        <h1 class="center">Skills</h1>
+        <div class="center"><button type="button" id="openDialog" class="button action">New skill</button></div>
+        <div class="totalWrapper"><span class="total">Total: <span id="total">{{ total }}</span></span></div>
+        <div class="tableWrapper">
+          <table id="skillsTable">
+            <colgroup>
+              <col class="text">
+              <col class="type">
+              <col class="logo">
+              <col class="actions">
+            </colgroup>
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Type</th>
+                <th>Logo</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{ #for items }}
+                <tr id="skill_{{ _id }}">
+                  <td>{{ title }}</td>
+                  <td>{{ type }}</td>
+                  <td class="logo">
+                    <img src="{{ logo.src }}" alt="{{ logo.name }}" title="{{ logo.name }}" width="50" height="50">
+                  </td>
+                  <td>
+                    <img src="../images/edit.png" alt="Edit" title="Edit" class="action edit" data-id="{{ _id }}" data-type="skill">
+                    <img src="../images/delete.png" alt="Delete" title="Delete" class="action delete" data-id="{{ _id }}" data-type="skill">
+                    <img src="../images/pin.png" alt="Pin" title="Pin" class="action pin" data-id="{{ _id }}" data-type="skill">
+                  </td>
+                </tr>
+              {{ #/for }}
+            </tbody>
+          </table>
+        </div>
+        <div id="overlay" class="overlay">
+          <div class="dialog">
+            <h2 class="dialogTitle"><span class="dialogTitleText">New</span><span class="closeDialog dialogTitleClose">&times;</span></h2>
+            <form id="skillForm" autocomplete="off" novalidate>
+              <div id="banner" class="banner" role="alert">
+                <span id="bannerText"></span>
+                <button type="button" id="bannerHide" class="close" aria-label="Close">&times;</button>
+              </div>
+              <input type="hidden" id="id" value="">
+              <div class="label">Title<span class="required">*</span></div>
+              <div class="inputGroup">
+                <div class="description"><img src="../images/title.png"></div>
+                <input type="text" id="title" class="input borders" value="" placeholder="Type here...">
+              </div>
+              <div class="label">Type<span class="required">*</span></div>
+              <div class="inputGroup">
+                <div class="description"><img src="../images/type.png"></div>
+                <select id="type" class="input borders">
+                  <option value="Language">Language</option>
+                  <option value="Framework">Framework</option>
+                  <option value="Technology">Technology</option>
+                </select>
+              </div>
+              <div class="label">Logo<span class="required">*</span></div>
+              <div class="inputGroup">
+                <div class="description"><img src="../images/camera.png"></div>
+                <label htmlFor="logo" class="input borders logoLabel placeholder">
+                  <span id="logoName">Select logo...</span>
+                  <input type="file" id="logo" accept="image/png, image/jpg, image/jpeg" class="none">
+                </label>
+              </div>
+              <img id="preview" class="logoPreview">
+              <div class="right">
+                <button type="button" class="button closeDialog">Close</button>
+                <button type="submit" id="skillButton" class="button" disabled>Save</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div id="toast">
+          <div class="toast">
+            <span id="toastText"></span>
+            <span id="toastHide" class="close">&times;</span>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+  <script type="module" src="../js/skills.js"></script>
+  <script type="module" src="../js/sidebar.js"></script>
+</html>

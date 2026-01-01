@@ -1,0 +1,16 @@
+export const ABOUT_TYPE = "about";
+export const DOWNLOAD_TYPE = "download";
+export const LOGIN_TYPE = "login";
+export const OVERVIEW_TYPE = "overview";
+export const PROFILE_TYPE = "profile";
+export const PASSWORD_TYPE = "password";
+export const QR_CODE_TYPE = "qrCode";
+export const TFA_TYPE = "tfa";
+export const AUTHENTICATION_TYPE = "authentication";
+export const SKILL_TYPE = "skill";
+export const RESUME_ITEM_TYPE = "resumeItem";
+export const PORTFOLIO_ITEM_TYPE = "portfolioItem";
+export const CERTIFICATION_TYPE = "certification";
+export const CUSTOMER_TYPE = "customer";
+export const CONTACT_TYPE = "contact";
+export const REMEMBER_ME_TYPE = "rememberMe";

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Resume</title>
+    <meta charset="UTF-8">
+    <meta name="author" content="Marko Bošnjak">
+    <meta name="description" content="{{ APPLICATION_NAME }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/layouts.css">
+  </head>
+  <body>
+    <div class="container">
+      {{ sidebar }}
+      <main class="content">
+        <h1 class="center">Resume</h1>
+        <div class="center"><button type="button" id="openDialog" class="button action">New resume item</button></div>
+        <div class="totalWrapper"><span class="total">Total: <span id="total">{{ total }}</span></span></div>
+        <div class="tableWrapper">
+          <table id="resumeTable">
+            <colgroup>
+              <col class="text">
+              <col class="text">
+              <col class="text">
+              <col class="text">
+              <col class="type">
+              <col class="actions">
+            </colgroup>
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Workplace</th>
+                <th>Duration</th>
+                <th>Description</th>
+                <th>Type</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{ #for items }}
+                <tr id="resumeItem_{{ _id }}">
+                  <td>
+                    <div><img src="../images/usaFlag.png" alt="USA flag"> {{ title }}</div>
+                    <div><img src="../images/germanFlag.png" alt="German flag"> {{ title_de }}</div>
+                  </td>
+                  <td>{{ workplace }}</td>
+                  <td>
+                    <div><img src="../images/usaFlag.png" alt="USA flag"> {{ duration }}</div>
+                    <div><img src="../images/germanFlag.png" alt="German flag"> {{ duration_de }}</div>
+                  </td>
+                  <td>
+                    <div><img src="../images/usaFlag.png" alt="USA flag"> {{ description }}</div>
+                    <div><img src="../images/germanFlag.png" alt="German flag"> {{ description_de }}</div>
+                  </td>
+                  <td>{{ type }}</td>
+                  <td>
+                    <img src="../images/edit.png" alt="Edit" title="Edit" class="action edit" data-id="{{ _id }}" data-type="resumeItem">
+                    <img src="../images/delete.png" alt="Delete" title="Delete" class="action delete" data-id="{{ _id }}" data-type="resumeItem">
+                    <img src="../images/pin.png" alt="Pin" title="Pin" class="action pin" data-id="{{ _id }}" data-type="resumeItem">
+                  </td>
+                </tr>
+              {{ #/for }}
+            </tbody>
+          </table>
+        </div>
+        <div id="overlay" class="overlay">
+          <div class="dialog">
+            <h2 class="dialogTitle"><span class="dialogTitleText">New</span><span class="closeDialog dialogTitleClose">&times;</span></h2>
+            <form id="resumeItemForm" autocomplete="off" novalidate>
+              <div id="banner" class="banner" role="alert">
+                <span id="bannerText"></span>
+                <button type="button" id="bannerHide" class="close" aria-label="Close">&times;</button>
+              </div>
+              <input type="hidden" id="id" value="">
+              <div class="label">Title<span class="required">*</span></div>
+              <div class="inputGroup">
+                <div class="description"><img src="../images/title.png"></div>
+                <input type="text" id="title" class="input borders" value="" placeholder="Type here...">
+              </div>
+              <div class="label">Title DE<span class="required">*</span></div>
+              <div class="inputGroup">
+                <div class="description"><img src="../images/title.png"></div>
+                <input type="text" id="title_de" class="input borders" value="" placeholder="Type here...">
+              </div>
+              <div class="label">Workplace<span class="required">*</span></div>
+              <div class="inputGroup">
+                <div class="description"><img src="../images/workplace.png"></div>
+                <input type="text" id="workplace" class="input borders" value="" placeholder="Type here...">
+              </div>
+              <div class="label">Duration<span class="required">*</span></div>
+              <div class="inputGroup">
+                <div class="description"><img src="../images/duration.png"></div>
+                <input type="text" id="duration" class="input borders" value="" placeholder="Type here...">
+              </div>
+              <div class="label">Duration DE<span class="required">*</span></div>
+              <div class="inputGroup">
+                <div class="description"><img src="../images/duration.png"></div>
+                <input type="text" id="duration_de" class="input borders" value="" placeholder="Type here...">
+              </div>
+              <div class="label">Description<span class="required">*</span></div>
+              <div class="inputGroup">
+                <div class="description"><img src="../images/description.png"></div>
+                <textarea id="description" class="input borders" placeholder="Type here..."></textarea>
+              </div>
+              <div class="label">Description DE<span class="required">*</span></div>
+              <div class="inputGroup">
+                <div class="description"><img src="../images/description.png"></div>
+                <textarea id="description_de" class="input borders" placeholder="Type here..."></textarea>
+              </div>
+              <div class="label">Type<span class="required">*</span></div>
+              <div class="inputGroup">
+                <div class="description"><img src="../images/type.png"></div>
+                <select id="type" class="input borders">
+                  <option value="Education">Education</option>
+                  <option value="Experience">Experience</option>
+                </select>
+              </div>
+              <div class="right">
+                <button type="button" class="button closeDialog">Close</button>
+                <button type="submit" id="resumeItemButton" class="button" disabled>Save</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div id="toast">
+          <div class="toast">
+            <span id="toastText"></span>
+            <span id="toastHide" class="close">&times;</span>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+  <script type="module" src="../js/resume.js"></script>
+  <script type="module" src="../js/sidebar.js"></script>
+</html>

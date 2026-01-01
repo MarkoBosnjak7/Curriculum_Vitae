@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Overview</title>
+    <meta charset="UTF-8">
+    <meta name="author" content="Marko Bošnjak">
+    <meta name="description" content="{{ APPLICATION_NAME }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/layouts.css">
+  </head>
+  <body>
+    <div class="container">
+      {{ sidebar }}
+      <main class="content">
+        <h1 class="center">Overview</h1>
+        <div class="profileCard">
+          <div class="profileHeader">
+            <div class="link"><img id="preview" src="{{ user.avatar.src }}" alt="{{ user.avatar.name }}" title="{{ user.avatar.name }}" class="avatar"></div>
+            <div class="username">{{ user.username }}</div>
+          </div>
+          <div class="profileDetails">
+            <div class="detail"><span class="description"><img src="../images/name.png">First name: </span><span class="value">{{ user.firstName }}</span></div>
+            <div class="detail"><span class="description"><img src="../images/name.png">Last name: </span><span class="value">{{ user.lastName }}</span></div>
+            <div class="detail"><span class="description"><img src="../images/email.png">Email: </span><span class="value"><a href="mailto:{{ user.email }}">{{ user.email }}</a></span></div>
+            <div class="detail"><span class="description"><img src="../images/telephone.png">Telephone: </span><span class="value"><a href="tel:{{ user.telephone }}">{{ user.telephone }}</a></span></div>
+            <div class="detail"><span class="description"><img src="../images/birthday.png">Birthday: </span><span class="value">{{ user.birthday }}</span></div>
+            <div class="detail"><span class="description"><img src="../images/address.png">Address: </span><span class="value"><a href="https://maps.google.com/?q={{ user.address }}" target="_blank">{{ user.address }}</a></span></div>
+            <div class="detail"><span class="description"><img src="../images/address.png">Address DE: </span><span class="value"><a href="https://maps.google.com/?q={{ user.address_de }}" target="_blank">{{ user.address_de }}</a></span></div>
+            <div class="detail"><span class="description"><img src="../images/language.png">Languages: </span><span class="value">{{ user.languages }}</span></div>
+            <div class="detail"><span class="description"><img src="../images/language.png">Languages DE: </span><span class="value">{{ user.languages_de }}</span></div>
+            <div class="detail"><span class="description"><img src="../images/profession.png">Profession: </span><span class="value">{{ user.profession }}</span></div>
+            <div class="detail"><span class="description"><img src="../images/profession.png">Profession DE: </span><span class="value">{{ user.profession_de }}</span></div>
+            <div class="detail"><span class="description"><img src="../images/gitHub.png">GitHub: </span><span class="value"><a href="{{ user.gitHub }}" target="_blank">{{ user.gitHub }}</a></span></div>
+          </div>
+        </div>
+        <div class="profile"><button type="button" id="profileButton" class="button action">Profile</button></div>
+      </main>
+    </div>
+  </body>
+  <script type="module" src="../js/overview.js"></script>
+  <script type="module" src="../js/sidebar.js"></script>
+</html>

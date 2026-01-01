@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>{{ #if isUnauthorized }}Unauthorized{{ #else }}Page not found{{ #/if }}</title>
+    <meta charset="UTF-8">
+    <meta name="author" content="Marko Bošnjak">
+    <meta name="description" content="{{ APPLICATION_NAME }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/layouts.css">
+  </head>
+  <body>
+    <h1 class="center">{{ #if isUnauthorized }}Unauthorized{{ #else }}Page not found{{ #/if }}</h1>
+    <div class="noAccess {{ #if isUnauthorized }}unauthorized{{ #else }}pageNotFound{{ #/if }}">{{ #if isUnauthorized }}401{{ #else }}404{{ #/if }}</div>
+    {{ #if isUnauthorized }}
+      <div class="center"><button type="button" class="button action" onclick="window.location.href = '/'">About</button></div>
+    {{ #/if }}
+  </body>
+</html>

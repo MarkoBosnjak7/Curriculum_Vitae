@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="{{ #if isGerman }}de{{ #else }}en{{ #/if }}">
+  <head>
+    <title>{{ TITLE }}</title>
+    <meta charset="UTF-8">
+    <meta name="author" content="Marko Bošnjak">
+    <meta name="description" content="{{ APPLICATION_NAME }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/download.css">
+  </head>
+  <body onload="window.print()">
+    <div class="download">
+      <div class="left">
+        <img src="{{ user.avatar.src }}" alt="{{ user.avatar.name }}" class="avatar">
+        <h2>{{ #if isGerman }}Informationen{{ #else }}Information{{ #/if }}</h2>
+        <p>{{ #if isGerman }}Geburtstag{{ #else }}Birthday{{ #/if }}:<br><b>{{ user.birthday }}</b></p>
+        <h2>{{ #if isGerman }}Sprachen{{ #else }}Languages{{ #/if }}</h2>
+        <p>{{ #if isGerman }}{{ user.languages_de }}{{ #else }}{{ user.languages }}{{ #/if }}</p>
+        <h2>{{ #if isGerman }}Kontakt{{ #else }}Contact{{ #/if }}</h2>
+        <p>{{ #if isGerman }}Telefon{{ #else }}Telephone{{ #/if }}:<br><b>{{ user.telephone }}</b></p>
+        <p>{{ #if isGerman }}E-Mail{{ #else }}Email{{ #/if }}:<br><b><a href="mailto:{{ user.email }}">{{ user.email }}</a></b></p>
+        <p>{{ #if isGerman }}Adresse{{ #else }}Address{{ #/if }}:<br><b>{{ user.address }}</b></p>
+        <p>{{ #if isGerman }}Webseite{{ #else }}Website{{ #/if }}:<br><b><a href="{{ website }}" target="_blank">{{ website }}</a></b></p>
+        <h2>{{ #if isGerman }}Zertifizierungen{{ #else }}Certifications{{ #/if }}</h2>
+        <ul>
+          {{ #for certifications }}
+            <li>{{ title }}</li>
+          {{ #/for }}
+        </ul>
+      </div>
+      <div class="right">
+        <div class="header">
+          <h1>{{ user.firstName }} {{ user.lastName }}</h1>
+          <p>{{ #if isGerman }}{{ user.profession_de }}{{ #else }}{{ user.profession }}{{ #/if }}</p>
+        </div>
+        <div class="section">
+          <h2>{{ #if isGerman }}Profil{{ #else }}Profile{{ #/if }}</h2>
+          <p>
+            <div>Full Stack Web Developer</div>
+            <div>Atlassian Certified Expert</div>
+            <div>DPS Innovation Award 2025</div>
+          </p>
+        </div>
+        <div class="section">
+          <h2>{{ #if isGerman }}Berufserfahrung{{ #else }}Experience{{ #/if }}</h2>
+          {{ #for resume.experiences }}
+            <div class="item">
+              <h3>{{ #if isGerman }}{{ title_de }}{{ #else }}{{ title }}{{ #/if }} - {{ workplace }}</h3>
+              <span>{{ #if isGerman }}{{ duration_de }}{{ #else }}{{ duration }}{{ #/if }}</span>
+              <p>{{ #if isGerman }}{{ description_de }}{{ #else }}{{ description }}{{ #/if }}</p>
+            </div>
+          {{ #/for }}
+        </div>
+        <div class="section">
+          <h2>{{ #if isGerman }}Ausbildung{{ #else }}Education{{ #/if }}</h2>
+          {{ #for resume.educations }}
+            <div class="item">
+              <h3>{{ #if isGerman }}{{ title_de }}{{ #else }}{{ title }}{{ #/if }} - {{ workplace }}</h3>
+              <span>{{ #if isGerman }}{{ duration_de }}{{ #else }}{{ duration }}{{ #/if }}</span>
+              <p>{{ #if isGerman }}{{ description_de }}{{ #else }}{{ description }}{{ #/if }}</p>
+            </div>
+          {{ #/for }}
+        </div>
+        <div class="section">
+          <h2>{{ #if isGerman }}Fähigkeiten{{ #else }}Skills{{ #/if }}</h2>
+          <div class="skills">
+            {{ #for skills }}
+              <div class="skill">{{ title }}</div>
+            {{ #/for }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

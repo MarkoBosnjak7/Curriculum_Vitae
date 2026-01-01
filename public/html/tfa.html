@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>{{ APPLICATION_NAME }}</title>
+    <meta charset="UTF-8">
+    <meta name="author" content="Marko Bošnjak">
+    <meta name="description" content="{{ APPLICATION_NAME }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/layouts.css">
+  </head>
+  <body>
+    <div class="container">
+      {{ sidebar }}
+      <main class="content">
+        <h1 class="center">2FA</h1>
+        <div class="center">
+          <div id="banner" class="banner tfa" role="alert">
+            <span id="bannerText"></span>
+            <button type="button" id="bannerHide" class="close" aria-label="Close">&times;</button>
+          </div>
+          <div id="status" class="{{ #if tfa.isEnabled }}enabled{{ #else }}disabled{{ #/if }}">
+            <b>{{ #if tfa.isEnabled }}Enabled{{ #else }}Disabled{{ #/if }}</b>
+          </div>
+          <div id="tfaEnabled" class="{{ #if !tfa.isEnabled }}none{{ #/if }}">
+            <div>
+              <b>
+                Disable 2FA authentication.<br>
+                Token will not be required for logging in.
+              </b>
+            </div>
+            <button type="button" id="tfaDisableButton" class="button error">Disable</button>
+          </div>
+          <div id="tfaDisabled" class="{{ #if tfa.isEnabled }}none{{ #/if }}">
+            <div>
+              <b>
+                Enable 2FA.<br>
+                Token will be required for logging in.
+              </b>
+            </div>
+            <button type="button" id="qrCodeButton" class="button action">Generate QR code</button>
+            <form id="tfaForm" class="form none" autocomplete="off" novalidate>
+              <img id="qrCode" src="" alt="QR Code" width="200" height="200">
+              <div class="label left">Token<span class="required">*</span></div>
+              <div class="inputGroup">
+                <div class="description"><img src="../images/token.png"></div>
+                <input type="text" id="token" maxlength="6" class="input borders" value="" placeholder="Enter the token...">
+              </div>
+              <div class="right"><button type="submit" id="tfaButton" class="button" disabled>Enable</button></div>
+            </form>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+  <script type="module" src="../js/tfa.js"></script>
+  <script type="module" src="../js/sidebar.js"></script>
+</html>
