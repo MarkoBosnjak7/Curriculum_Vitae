@@ -132,20 +132,20 @@
           <p>{{ #if isGerman }}Sprachen{{ #else }}Languages{{ #/if }}: <span>{{ #if isGerman }}{{ user.languages_de }}{{ #else }}{{ user.languages }}{{ #/if }}</span></p>
           <p><button type="button" id="downloadButton" data-language="{{ #if isGerman }}de{{ #else }}en{{ #/if }}">{{ #if isGerman }}PDF herunterladen{{ #else }}Download PDF{{ #/if }}</button></p>
         </div>
-        <form id="contactForm" autocomplete="off" novalidate>
+        <form id="contactForm" novalidate>
           <div id="banner" class="banner" role="alert">
             <span id="bannerText"></span>
             <button type="button" id="bannerHide" class="close" aria-label="Close">&times;</button>
           </div>
           <input type="hidden" id="isGerman" value="{{ isGerman }}">
           <label for="name">Name</label>
-          <input type="text" id="name" class="contactInput" value="">
+          <input type="text" id="name" class="contactInput" value="" autocomplete="off">
           <label for="email">{{ #if isGerman }}E-Mail{{ #else }}Email{{ #/if }}</label>
-          <input type="email" id="email" class="contactInput" value="">
+          <input type="email" id="email" class="contactInput" value="" autocomplete="off">
           <label for="subject">{{ #if isGerman }}Thema{{ #else }}Subject{{ #/if }}</label>
-          <input type="text" id="subject" class="contactInput" value="">
+          <input type="text" id="subject" class="contactInput" value="" autocomplete="off">
           <label for="message">{{ #if isGerman }}Nachricht{{ #else }}Message{{ #/if }}</label>
-          <textarea id="message" class="contactInput"></textarea>
+          <textarea id="message" class="contactInput" autocomplete="off"></textarea>
           <button type="submit" id="contactButton" disabled>{{ #if isGerman }}Senden{{ #else }}Submit{{ #/if }}</button>
         </form>
       </div>

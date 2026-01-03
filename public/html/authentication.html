@@ -11,7 +11,7 @@
   </head>
   <body>
     <h1 class="center">Authentication</h1>
-    <form id="authenticationForm" class="form" autocomplete="off" novalidate>
+    <form id="authenticationForm" class="form" novalidate>
       <div id="banner" class="banner" role="alert">
         <span id="bannerText"></span>
         <button type="button" id="bannerHide" class="close" aria-label="Close">&times;</button>
@@ -19,7 +19,7 @@
       <div class="label">Token<span class="required">*</span></div>
       <div class="inputGroup">
         <div class="description"><img src="../images/token.png"></div>
-        <input type="text" id="token" maxlength="6" class="input borders" value="" placeholder="Enter the token...">
+        <input type="text" id="token" maxlength="6" class="input borders" value="" placeholder="Enter the token..." autocomplete="off">
       </div>
       <div class="right"><button type="submit" id="authenticationButton" class="button" disabled>Login</button></div>
     </form>

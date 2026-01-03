@@ -38,12 +38,12 @@
               </b>
             </div>
             <button type="button" id="qrCodeButton" class="button action">Generate QR code</button>
-            <form id="tfaForm" class="form none" autocomplete="off" novalidate>
+            <form id="tfaForm" class="form none" novalidate>
               <img id="qrCode" src="" alt="QR Code" width="200" height="200">
               <div class="label left">Token<span class="required">*</span></div>
               <div class="inputGroup">
                 <div class="description"><img src="../images/token.png"></div>
-                <input type="text" id="token" maxlength="6" class="input borders" value="" placeholder="Enter the token...">
+                <input type="text" id="token" maxlength="6" class="input borders" value="" placeholder="Enter the token..." autocomplete="off">
               </div>
               <div class="right"><button type="submit" id="tfaButton" class="button" disabled>Enable</button></div>
             </form>

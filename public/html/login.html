@@ -11,7 +11,7 @@
   </head>
   <body>
     <h1 class="center">Login</h1>
-    <form id="loginForm" class="form" autocomplete="off" novalidate>
+    <form id="loginForm" class="form" novalidate>
       <div id="banner" class="banner" role="alert">
         <span id="bannerText"></span>
         <button type="button" id="bannerHide" class="close" aria-label="Close">&times;</button>
@@ -19,16 +19,16 @@
       <div class="label">Username<span class="required">*</span></div>
       <div class="inputGroup">
         <div class="description"><img src="../images/username.png"></div>
-        <input type="text" id="username" class="input borders" value="" placeholder="Type here...">
+        <input type="text" id="username" class="input borders" value="" placeholder="Type here..." autocomplete="off">
       </div>
       <div class="label">Password<span class="required">*</span></div>
       <div class="inputGroup">
         <div class="description"><img src="../images/password.png"></div>
-        <input type="password" id="password" class="input" value="" placeholder="Enter the password..." title="Minimum of 8 characters including at least one upper- and lowercase letter, digit and special character.">
+        <input type="password" id="password" class="input" value="" placeholder="Enter the password..." title="Minimum of 8 characters including at least one upper- and lowercase letter, digit and special character." autocomplete="off">
         <div id="togglePassword" class="togglePassword"><img id="togglePasswordImage" src="../images/show.png"></div>
       </div>
       <div class="inputGroup">
-        <input type="checkbox" id="rememberMe">
+        <input type="checkbox" id="rememberMe" autocomplete="off">
         <label for="rememberMe"> Remember me?</label>
       </div>
       <div class="right"><button type="submit" id="loginButton" class="button" disabled>Login</button></div>
