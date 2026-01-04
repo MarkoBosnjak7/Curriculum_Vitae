@@ -1,6 +1,6 @@
 import { getUserById, getUserTfa, saveUserTfa } from "../utilities/database.js";
 import { isAuthorized } from "../utilities/authorization.js";
-import { generateQrCodeSecret, verifyTotp } from "../utilities/tfa.js";
+import { createQrCode, verifyTotp } from "../utilities/tfa.js";
 import { getHtmlFile, handleApplicationJson } from "../utilities/scripts.js";
 import { isTokenValid } from "../utilities/validations.js";
 import { TFA_TYPE } from "../utilities/types.js";
@@ -19,7 +19,7 @@ export const generateQrCode = async (request, response) => {
   const { isLoggedIn, userId } = await isAuthorized(request, response);
   if (isLoggedIn) {
     const { username } = await getUserById(userId);
-    const qrCode = await generateQrCodeSecret(userId, username || process.env.ADMINISTRATOR_USERNAME);
+    const qrCode = await createQrCode(userId, username || process.env.ADMINISTRATOR_USERNAME);
     return response.writeHead(200, { "Content-Type": "application/json" }).end(JSON.stringify({ message: qrCode }));
   } else {
     return response.writeHead(401, { "Content-Type": "application/json" }).end(JSON.stringify({ message: UNAUTHORIZED_MESSAGE }));

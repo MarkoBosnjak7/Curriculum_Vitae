@@ -90,7 +90,7 @@ export const verifyTotp = (token, secretBase32, window = 1) => {
   return { ok: false };
 };
 
-export const generateQrCodeSecret = async (userId, account) => {
+export const createQrCode = async (userId, account) => {
   const secret = base32Encode();
   await saveUserSecret(userId, secret);
   return generateOtpAuthenticationURL(secret, account);
