@@ -18,8 +18,8 @@ export const getTfa = async (request, response) => {
 export const generateQrCode = async (request, response) => {
   const { isLoggedIn, userId } = await isAuthorized(request, response);
   if (isLoggedIn) {
-    const { email } = await getUserById(userId);
-    const qrCode = await generateQrCodeSecret(userId, email || process.env.EMAIL_USERNAME);
+    const { username } = await getUserById(userId);
+    const qrCode = await generateQrCodeSecret(userId, username || process.env.ADMINISTRATOR_USERNAME);
     return response.writeHead(200, { "Content-Type": "application/json" }).end(JSON.stringify({ message: qrCode }));
   } else {
     return response.writeHead(401, { "Content-Type": "application/json" }).end(JSON.stringify({ message: UNAUTHORIZED_MESSAGE }));
