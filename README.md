@@ -2,7 +2,7 @@
 
 **Features:**  
 REST API  
-Login system (Cookie-based)  
+Login system (Session cookie)  
 Password encryption  
 Two-factor authentication  
 MongoDB  
