@@ -146,3 +146,10 @@ export const getLanguage = (request) => {
 };
 
 export const getFilteredItems = (items, type) => items.filter((item) => item.type === type);
+
+export const isStaticFileAllowed = (url, folder, allowedExtensions) => {
+  const pathname = url.split("?")[0];
+  if (!pathname.startsWith(`/${folder}/`)) return false;
+  const extension = path.extname(pathname).toLowerCase();
+  return allowedExtensions.includes(extension);
+};
