@@ -19,7 +19,7 @@ await connect();
 
 server.on("request", async (request, response) => {
   const { url, method, headers: { "content-type": contentType } } = request;
-  if (url.endsWith(".php")) return response.writeHead(404).end("Not found.");
+  if (url.endsWith(".php")) return response.writeHead(404, { "Content-Type": "text/plain" }).end("File not found.");
   if (((url === "/") || (url.startsWith("/?language="))) && (method === "GET")) await getAbout(ABOUT_TYPE, request, response);
   else if (url.startsWith("/download?language=") && (method === "GET")) await getAbout(DOWNLOAD_TYPE, request, response);
   else if ((url === "/login") && (method === "GET")) await getLogin(request, response);
