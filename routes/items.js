@@ -1,4 +1,4 @@
-import { getItemsDB, getItemDB, saveItemDB, deleteItemDB, pinItemDB } from "../utilities/database.js";
+import { getItemsDB, getItemDB, saveItemDB, pinItemDB, deleteItemDB } from "../utilities/database.js";
 import { isAuthorized } from "../utilities/authorization.js";
 import { getHtmlFile, handleApplicationJson } from "../utilities/scripts.js";
 import { isTextValid, isObjectIdValid, isArrayValid, isObjectValid, isFileObjectValid, isSkillTypeValid, isResumeItemTypeValid, isPortfolioItemTypeValid } from "../utilities/validations.js";
@@ -85,20 +85,6 @@ export const getItem = async (type, request, response, id) => {
   }
 };
 
-export const deleteItem = async (type, request, response, id) => {
-  const { isLoggedIn } = await isAuthorized(request, response);
-  if (isLoggedIn) {
-    if (isObjectIdValid(id)) {
-      await deleteItemDB(type, id);
-      return response.writeHead(200, { "Content-Type": "application/json" }).end(JSON.stringify({ message: "Item has been successfully deleted." }));
-    } else {
-      return response.writeHead(404, { "Content-Type": "application/json" }).end(JSON.stringify({ message: INVALID_ITEM_ID_MESSAGE }));
-    }
-  } else {
-    return response.writeHead(401, { "Content-Type": "application/json" }).end(JSON.stringify({ message: UNAUTHORIZED_MESSAGE }));
-  }
-};
-
 export const pinItem = async (type, request, response, id) => {
   const { isLoggedIn } = await isAuthorized(request, response);
   if (isLoggedIn) {
@@ -109,6 +95,20 @@ export const pinItem = async (type, request, response, id) => {
       }
     }
     return response.writeHead(404, { "Content-Type": "application/json" }).end(JSON.stringify({ message: INVALID_ITEM_ID_MESSAGE }));
+  } else {
+    return response.writeHead(401, { "Content-Type": "application/json" }).end(JSON.stringify({ message: UNAUTHORIZED_MESSAGE }));
+  }
+};
+
+export const deleteItem = async (type, request, response, id) => {
+  const { isLoggedIn } = await isAuthorized(request, response);
+  if (isLoggedIn) {
+    if (isObjectIdValid(id)) {
+      await deleteItemDB(type, id);
+      return response.writeHead(200, { "Content-Type": "application/json" }).end(JSON.stringify({ message: "Item has been successfully deleted." }));
+    } else {
+      return response.writeHead(404, { "Content-Type": "application/json" }).end(JSON.stringify({ message: INVALID_ITEM_ID_MESSAGE }));
+    }
   } else {
     return response.writeHead(401, { "Content-Type": "application/json" }).end(JSON.stringify({ message: UNAUTHORIZED_MESSAGE }));
   }

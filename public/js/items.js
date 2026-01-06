@@ -75,6 +75,26 @@ export const getItem = async (event) => {
   tbody.classList.remove("disabled");
 };
 
+export const pinItem = async (event) => {
+  const { target: { dataset: { id, type } } } = event;
+  const tr = document.getElementById(`${type}_${id}`);
+  const tbody = tr.closest("tbody");
+  const title = (type === RESUME_ITEM_TYPE) ? tr.cells[0].querySelector("div").textContent.trim() : tr.cells[0].textContent;
+  const isConfirmed = window.confirm(`Do you really want to pin ${title}?`);
+  if (isConfirmed) {
+    tbody.classList.add("disabled");
+    const response = await fetch(`/pin${capitalize(type)}/${id}`, { method: "PUT" });
+    const { ok } = response;
+    const { message } = await response.json();
+    if (ok) {
+      tr.remove();
+      tbody.insertBefore(tr, tbody.firstChild);
+    }
+    tbody.classList.remove("disabled");
+    showToast(message, ok ? "success" : "error");
+  }
+};
+
 export const deleteItem = async (event) => {
   const { target: { dataset: { id, type } } } = event;
   const tr = document.getElementById(`${type}_${id}`);
@@ -96,28 +116,8 @@ export const deleteItem = async (event) => {
   }
 };
 
-export const pinItem = async (event) => {
-  const { target: { dataset: { id, type } } } = event;
-  const tr = document.getElementById(`${type}_${id}`);
-  const tbody = tr.closest("tbody");
-  const title = (type === RESUME_ITEM_TYPE) ? tr.cells[0].querySelector("div").textContent.trim() : tr.cells[0].textContent;
-  const isConfirmed = window.confirm(`Do you really want to pin ${title}?`);
-  if (isConfirmed) {
-    tbody.classList.add("disabled");
-    const response = await fetch(`/pin${capitalize(type)}/${id}`, { method: "PUT" });
-    const { ok } = response;
-    const { message } = await response.json();
-    if (ok) {
-      tr.remove();
-      tbody.insertBefore(tr, tbody.firstChild);
-    }
-    tbody.classList.remove("disabled");
-    showToast(message, ok ? "success" : "error");
-  }
-};
-
 const capitalize = (type) => `${type.charAt(0).toUpperCase()}${type.slice(1)}`;
 
 document.querySelectorAll(".edit").forEach((action) => action.addEventListener("click", getItem));
-document.querySelectorAll(".delete").forEach((action) => action.addEventListener("click", deleteItem));
 document.querySelectorAll(".pin").forEach((action) => action.addEventListener("click", pinItem));
+document.querySelectorAll(".delete").forEach((action) => action.addEventListener("click", deleteItem));

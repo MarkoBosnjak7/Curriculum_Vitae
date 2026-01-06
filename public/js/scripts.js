@@ -1,4 +1,4 @@
-import { getItem, deleteItem, pinItem } from "./items.js";
+import { getItem, pinItem, deleteItem } from "./items.js";
 import { isTextValid } from "../../utilities/validations.js";
 
 export const validateButton = (type, isValid, text = null) => {
@@ -27,12 +27,12 @@ export const addLogo = (cell, logo, trId) => {
 export const addActions = (cell, id, type) => {
   cell.innerHTML = `
     <img src="../images/edit.png" alt="Edit" title="Edit" class="action edit" data-id="${id}" data-type="${type}">
-    <img src="../images/delete.png" alt="Delete" title="Delete" class="action delete" data-id="${id}" data-type="${type}">
     <img src="../images/pin.png" alt="Pin" title="Pin" class="action pin" data-id="${id}" data-type="${type}">
+    <img src="../images/delete.png" alt="Delete" title="Delete" class="action delete" data-id="${id}" data-type="${type}">
   `;
   cell.querySelector(".edit").addEventListener("click", getItem);
-  cell.querySelector(".delete").addEventListener("click", deleteItem);
   cell.querySelector(".pin").addEventListener("click", pinItem);
+  cell.querySelector(".delete").addEventListener("click", deleteItem);
 };
 
 export const addImageLinks = (selector = null) => {

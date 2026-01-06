@@ -132,18 +132,18 @@ export const saveItemDB = async (type, data) => {
   }
 };
 
+export const pinItemDB = async (type, id) => {
+  const items = (type === SKILL_TYPE) ? skills : (type === RESUME_ITEM_TYPE) ? resume : (type === PORTFOLIO_ITEM_TYPE) ? portfolio : (type === CERTIFICATION_TYPE) ? certifications : (type === CUSTOMER_TYPE) ? customers : null;
+  if (items) return await items.findOneAndUpdate({ _id: ObjectId.createFromHexString(id) }, { $set: { timestamp: Date.now() } });
+  else return null;
+};
+
 export const deleteItemDB = async (type, id) => {
   const item = await getItemDB(type, id);
   if (isObjectValid(item)) {
     const items = (type === SKILL_TYPE) ? skills : (type === RESUME_ITEM_TYPE) ? resume : (type === PORTFOLIO_ITEM_TYPE) ? portfolio : (type === CERTIFICATION_TYPE) ? certifications : (type === CUSTOMER_TYPE) ? customers : (type === CONTACT_TYPE) ? contacts : null;
     if (items) await items.deleteOne({ _id: ObjectId.createFromHexString(id) });
   }
-};
-
-export const pinItemDB = async (type, id) => {
-  const items = (type === SKILL_TYPE) ? skills : (type === RESUME_ITEM_TYPE) ? resume : (type === PORTFOLIO_ITEM_TYPE) ? portfolio : (type === CERTIFICATION_TYPE) ? certifications : (type === CUSTOMER_TYPE) ? customers : null;
-  if (items) return await items.findOneAndUpdate({ _id: ObjectId.createFromHexString(id) }, { $set: { timestamp: Date.now() } });
-  else return null;
 };
 
 export const saveContactDB = async (name, email, subject, message, isGerman, timestamp) => await contacts.insertOne({ name, email, subject, message, isGerman, isAnswered: false, timestamp });
