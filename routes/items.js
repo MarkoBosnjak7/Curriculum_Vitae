@@ -1,7 +1,7 @@
 import { getItemsDB, getItemDB, saveItemDB, pinItemDB, deleteItemDB } from "../utilities/database.js";
 import { isAuthorized } from "../utilities/authorization.js";
 import { getHtmlFile, handleApplicationJson } from "../utilities/scripts.js";
-import { isTextValid, isObjectIdValid, isArrayValid, isObjectValid, isFileObjectValid, isSkillTypeValid, isResumeItemTypeValid, isPortfolioItemTypeValid } from "../utilities/validations.js";
+import { isTextValid, isLinkValid, isObjectIdValid, isArrayValid, isObjectValid, isFileObjectValid, isSkillTypeValid, isResumeItemTypeValid, isPortfolioItemTypeValid } from "../utilities/validations.js";
 import { SKILL_TYPE, RESUME_ITEM_TYPE, PORTFOLIO_ITEM_TYPE, CERTIFICATION_TYPE, CUSTOMER_TYPE, CONTACT_TYPE } from "../utilities/types.js";
 import { DATE_TIME_FORMAT, INVALID_ITEM_ID_MESSAGE, UNAUTHORIZED_MESSAGE, ERROR_MESSAGE } from "../utilities/constants.js";
 
@@ -38,8 +38,9 @@ export const saveItem = async (type, request, response) => {
         if (!isTextValid(description_de)) errors = [...errors, "Description DE"];
         if (!isResumeItemTypeValid(type)) errors = [...errors, "Type"];
       } else if (type === PORTFOLIO_ITEM_TYPE) {
-        const { title, type, logo } = data;
+        const { title, link, type, logo } = data;
         if (!isTextValid(title)) errors = [...errors, "Title"];
+        if (isTextValid(link) && !isLinkValid(link)) errors = [...errors, "Link"];
         if (!isPortfolioItemTypeValid(type)) errors = [...errors, "Type"];
         if (!isFileObjectValid(logo)) errors = [...errors, "Logo"];
       } else if (type === CERTIFICATION_TYPE) {

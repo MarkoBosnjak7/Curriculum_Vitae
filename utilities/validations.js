@@ -30,7 +30,6 @@ export const isEmailValid = (email) => isTextValid(email) && /^[a-zA-Z0-9._%+-]+
 export const isNumberValid = (number) => (typeof number === "number") && Number.isFinite(number) && (number > 0);
 
 export const isLinkValid = (link) => {
-  if (!isTextValid(link)) return false;
   try {
     const url = new URL(link);
     const { protocol } = url;

@@ -7,9 +7,10 @@ import { PORTFOLIO_ITEM_TYPE } from "../../utilities/types.js";
 
 const validateForm = () => {
   const title = document.getElementById("title").value;
+  const link = document.getElementById("link").value;
   const type = document.getElementById("type").value;
   const logo = getFileObject();
-  const isValid = isTextValid(title) && isPortfolioItemTypeValid(type) && isFileObjectValid(logo);
+  const isValid = isTextValid(title) && (!isTextValid(link) || isLinkValid(link)) && isPortfolioItemTypeValid(type) && isFileObjectValid(logo);
   validateButton(PORTFOLIO_ITEM_TYPE, isValid);
 };
 
@@ -20,6 +21,7 @@ const savePortfolioItem = async (event) => {
     fieldIds: ["title", "link", "type", "logo"],
     validations: {
       title: isTextValid,
+      link: (value) => (!isTextValid(value) || isLinkValid(value)),
       type: isPortfolioItemTypeValid,
       logo: isFileObjectValid
     },
