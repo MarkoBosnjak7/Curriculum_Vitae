@@ -1,5 +1,9 @@
 import { LOGIN_TYPE, AUTHENTICATION_TYPE, CONTACT_TYPE } from "./types.js";
 
+export const isContentTypeValid = (contentType) => contentType === "application/json";
+
+export const areQueryParametersValid = (queryParameters, allowedQueryParameters) => [...queryParameters.keys()].every((queryParameter) => allowedQueryParameters.includes(queryParameter));
+
 export const isTextValid = (text) => (typeof text === "string") && (text.trim().length > 0);
 
 export const isUsernameValid = (username) => {

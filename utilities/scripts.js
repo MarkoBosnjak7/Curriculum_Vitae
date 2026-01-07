@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import crypto from "crypto";
 import { getAdministrator } from "./database.js";
-import { isTextValid, isArrayValid, isObjectValid } from "./validations.js";
+import { isTextValid, isObjectIdValid, isArrayValid, isObjectValid } from "./validations.js";
 import { LOGIN_TYPE, OVERVIEW_TYPE, PROFILE_TYPE, TFA_TYPE, AUTHENTICATION_TYPE, SKILL_TYPE, RESUME_ITEM_TYPE, PORTFOLIO_ITEM_TYPE, CERTIFICATION_TYPE, CUSTOMER_TYPE, CONTACT_TYPE } from "./types.js";
 
 export const getAdministratorDefaultEmail = () => {
@@ -148,8 +148,19 @@ export const getLanguage = (request) => {
 export const getFilteredItems = (items, type) => items.filter((item) => item.type === type);
 
 export const isStaticFileAllowed = (url, folder, allowedExtensions) => {
-  const pathname = url.split("?")[0];
+  const { pathname } = url;
   if (!pathname.startsWith(`/${folder}/`)) return false;
   const extension = path.extname(pathname).toLowerCase();
   return allowedExtensions.includes(extension);
+};
+
+export const getId = (url, base) => {
+  const { pathname, searchParams } = url;
+  if (!pathname.startsWith(`${base}/`)) return null;
+  const id = pathname.slice(base.length + 1);
+  if (!id) return null;
+  if (id.includes("/")) return null;
+  if (!isObjectIdValid(id)) return null;
+  if (searchParams.size !== 0) return null;
+  return id;
 };

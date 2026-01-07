@@ -8,7 +8,8 @@ import { getTfa, generateQrCode, toggleTfa } from "./routes/tfa.js";
 import { getItems, saveItem, getItem, pinItem, deleteItem } from "./routes/items.js";
 import { saveContact, answerContact } from "./routes/contacts.js";
 import { getJsFile, getUtilityFile, getCssFile, getImageFile, getFaviconFile, getNoAccessFile } from "./routes/static.js";
-import { isStaticFileAllowed } from "./utilities/scripts.js";
+import { isStaticFileAllowed, getId } from "./utilities/scripts.js";
+import { isContentTypeValid, areQueryParametersValid } from "./utilities/validations.js";
 import { ABOUT_TYPE, DOWNLOAD_TYPE, OVERVIEW_TYPE, PROFILE_TYPE, SKILL_TYPE, RESUME_ITEM_TYPE, PORTFOLIO_ITEM_TYPE, CERTIFICATION_TYPE, CUSTOMER_TYPE, CONTACT_TYPE } from "./utilities/types.js";
 
 const BASE_URL = process.env.BASE_URL;
@@ -17,61 +18,97 @@ const PORT = process.env.PORT || BASE_URL.split(":")[2];
 const server = http.createServer();
 await connect();
 
+const routes = {
+  GET: [
+    { path: "/", queryParameters: ["language"], handler: (request, response) => getAbout(ABOUT_TYPE, request, response) },
+    { path: "/download", queryParameters: ["language"], handler: (request, response) => getAbout(DOWNLOAD_TYPE, request, response) },
+    { path: "/login", handler: getLogin },
+    { path: "/logoutUser", handler: logoutUser },
+    { path: "/authentication", handler: getAuthentication },
+    { path: "/overview", handler: (request, response) => getProfile(OVERVIEW_TYPE, request, response) },
+    { path: "/profile", handler: (request, response) => getProfile(PROFILE_TYPE, request, response) },
+    { path: "/password", handler: getPassword },
+    { path: "/tfa", handler: getTfa },
+    { path: "/generateQrCode", handler: generateQrCode },
+    { path: "/skills", handler: (request, response) => getItems(SKILL_TYPE, request, response) },
+    { base: "/getSkill", handler: (request, response, id) => getItem(SKILL_TYPE, request, response, id) },
+    { path: "/resume", handler: (request, response) => getItems(RESUME_ITEM_TYPE, request, response) },
+    { base: "/getResumeItem", handler: (request, response, id) => getItem(RESUME_ITEM_TYPE, request, response, id) },
+    { path: "/portfolio", handler: (request, response) => getItems(PORTFOLIO_ITEM_TYPE, request, response) },
+    { base: "/getPortfolioItem", handler: (request, response, id) => getItem(PORTFOLIO_ITEM_TYPE, request, response, id) },
+    { path: "/certifications", handler: (request, response) => getItems(CERTIFICATION_TYPE, request, response) },
+    { base: "/getCertification", handler: (request, response, id) => getItem(CERTIFICATION_TYPE, request, response, id) },
+    { path: "/customers", handler: (request, response) => getItems(CUSTOMER_TYPE, request, response) },
+    { base: "/getCustomer", handler: (request, response, id) => getItem(CUSTOMER_TYPE, request, response, id) },
+    { path: "/contacts", handler: (request, response) => getItems(CONTACT_TYPE, request, response) },
+    { base: "/getContact", handler: (request, response, id) => getItem(CONTACT_TYPE, request, response, id) }
+  ],
+  POST: [
+    { path: "/loginUser", applicationJson: true, handler: loginUser },
+    { path: "/authenticateUser", applicationJson: true, handler: authenticateUser },
+    { path: "/saveSkill", applicationJson: true, handler: (request, response) => saveItem(SKILL_TYPE, request, response) },
+    { path: "/saveResumeItem", applicationJson: true, handler: (request, response) => saveItem(RESUME_ITEM_TYPE, request, response) },
+    { path: "/savePortfolioItem", applicationJson: true, handler: (request, response) => saveItem(PORTFOLIO_ITEM_TYPE, request, response) },
+    { path: "/saveCertification", applicationJson: true, handler: (request, response) => saveItem(CERTIFICATION_TYPE, request, response) },
+    { path: "/saveCustomer", applicationJson: true, handler: (request, response) => saveItem(CUSTOMER_TYPE, request, response) },
+    { path: "/saveContact", applicationJson: true, handler: saveContact },
+    { path: "/toggleTfa", applicationJson: true, handler: toggleTfa }
+  ],
+  PUT: [
+    { path: "/saveProfile", applicationJson: true, handler: saveProfile },
+    { path: "/savePassword", applicationJson: true, handler: savePassword },
+    { base: "/pinSkill", handler: (request, response, id) => pinItem(SKILL_TYPE, request, response, id) },
+    { base: "/pinResumeItem", handler: (request, response, id) => pinItem(RESUME_ITEM_TYPE, request, response, id) },
+    { base: "/pinPortfolioItem", handler: (request, response, id) => pinItem(PORTFOLIO_ITEM_TYPE, request, response, id) },
+    { base: "/pinCertification", handler: (request, response, id) => pinItem(CERTIFICATION_TYPE, request, response, id) },
+    { base: "/pinCustomer", handler: (request, response, id) => pinItem(CUSTOMER_TYPE, request, response, id) },
+    { base: "/answerContact", applicationJson: true, handler: (request, response, id) => answerContact(request, response, id) }
+  ],
+  DELETE: [
+    { base: "/deleteSkill", handler: (request, response, id) => deleteItem(SKILL_TYPE, request, response, id) },
+    { base: "/deleteResumeItem", handler: (request, response, id) => deleteItem(RESUME_ITEM_TYPE, request, response, id) },
+    { base: "/deletePortfolioItem", handler: (request, response, id) => deleteItem(PORTFOLIO_ITEM_TYPE, request, response, id) },
+    { base: "/deleteCertification", handler: (request, response, id) => deleteItem(CERTIFICATION_TYPE, request, response, id) },
+    { base: "/deleteCustomer", handler: (request, response, id) => deleteItem(CUSTOMER_TYPE, request, response, id) },
+    { base: "/deleteContact", handler: (request, response, id) => deleteItem(CONTACT_TYPE, request, response, id) }
+  ]
+};
+
 server.on("request", async (request, response) => {
-  const { url, method, headers: { "content-type": contentType } } = request;
-  if (url.endsWith(".php")) return response.writeHead(404, { "Content-Type": "text/plain" }).end("File not found.");
-  if (((url === "/") || (url.startsWith("/?language="))) && (method === "GET")) await getAbout(ABOUT_TYPE, request, response);
-  else if (url.startsWith("/download?language=") && (method === "GET")) await getAbout(DOWNLOAD_TYPE, request, response);
-  else if ((url === "/login") && (method === "GET")) await getLogin(request, response);
-  else if ((url === "/loginUser") && (method === "POST") && (contentType === "application/json")) await loginUser(request, response);
-  else if ((url === "/logoutUser") && (method === "GET")) logoutUser(response);
-  else if ((url === "/authentication") && (method === "GET")) await getAuthentication(request, response);
-  else if ((url === "/authenticateUser") && (method === "POST") && (contentType === "application/json")) await authenticateUser(request, response);
-  else if ((url === "/overview") && (method === "GET")) await getProfile(OVERVIEW_TYPE, request, response);
-  else if ((url === "/profile") && (method === "GET")) await getProfile(PROFILE_TYPE, request, response);
-  else if ((url === "/saveProfile") && (method === "PUT") && (contentType === "application/json")) await saveProfile(request, response);
-  else if ((url === "/password") && (method === "GET")) await getPassword(request, response);
-  else if ((url === "/savePassword") && (method === "PUT") && (contentType === "application/json")) await savePassword(request, response);
-  else if ((url === "/tfa") && (method === "GET")) await getTfa(request, response);
-  else if ((url === "/toggleTfa") && (method === "POST") && (contentType === "application/json")) await toggleTfa(request, response);
-  else if ((url === "/generateQrCode") && (method === "GET")) await generateQrCode(request, response);
-  else if ((url === "/skills") && (method === "GET")) await getItems(SKILL_TYPE, request, response);
-  else if (url.startsWith("/getSkill/") && (method === "GET")) await getItem(SKILL_TYPE, request, response, path.basename(url));
-  else if ((url === "/saveSkill") && (method === "POST") && (contentType === "application/json")) await saveItem(SKILL_TYPE, request, response);
-  else if (url.startsWith("/pinSkill/") && (method === "PUT")) await pinItem(SKILL_TYPE, request, response, path.basename(url));
-  else if (url.startsWith("/deleteSkill/") && (method === "DELETE")) await deleteItem(SKILL_TYPE, request, response, path.basename(url));
-  else if ((url === "/resume") && (method === "GET")) await getItems(RESUME_ITEM_TYPE, request, response);
-  else if (url.startsWith("/getResumeItem/") && (method === "GET")) await getItem(RESUME_ITEM_TYPE, request, response, path.basename(url));
-  else if ((url === "/saveResumeItem") && (method === "POST") && (contentType === "application/json")) await saveItem(RESUME_ITEM_TYPE, request, response);
-  else if (url.startsWith("/pinResumeItem/") && (method === "PUT")) await pinItem(RESUME_ITEM_TYPE, request, response, path.basename(url));
-  else if (url.startsWith("/deleteResumeItem/") && (method === "DELETE")) await deleteItem(RESUME_ITEM_TYPE, request, response, path.basename(url));
-  else if ((url === "/portfolio") && (method === "GET")) await getItems(PORTFOLIO_ITEM_TYPE, request, response);
-  else if (url.startsWith("/getPortfolioItem/") && (method === "GET")) await getItem(PORTFOLIO_ITEM_TYPE, request, response, path.basename(url));
-  else if ((url === "/savePortfolioItem") && (method === "POST") && (contentType === "application/json")) await saveItem(PORTFOLIO_ITEM_TYPE, request, response);
-  else if (url.startsWith("/pinPortfolioItem/") && (method === "PUT")) await pinItem(PORTFOLIO_ITEM_TYPE, request, response, path.basename(url)); 
-  else if (url.startsWith("/deletePortfolioItem/") && (method === "DELETE")) await deleteItem(PORTFOLIO_ITEM_TYPE, request, response, path.basename(url));
-  else if ((url === "/certifications") && (method === "GET")) await getItems(CERTIFICATION_TYPE, request, response);
-  else if (url.startsWith("/getCertification/") && (method === "GET")) await getItem(CERTIFICATION_TYPE, request, response, path.basename(url));
-  else if ((url === "/saveCertification") && (method === "POST") && (contentType === "application/json")) await saveItem(CERTIFICATION_TYPE, request, response);
-  else if (url.startsWith("/pinCertification/") && (method === "PUT")) await pinItem(CERTIFICATION_TYPE, request, response, path.basename(url));
-  else if (url.startsWith("/deleteCertification/") && (method === "DELETE")) await deleteItem(CERTIFICATION_TYPE, request, response, path.basename(url));
-  else if ((url === "/customers") && (method === "GET")) await getItems(CUSTOMER_TYPE, request, response);
-  else if (url.startsWith("/getCustomer/") && (method === "GET")) await getItem(CUSTOMER_TYPE, request, response, path.basename(url));
-  else if ((url === "/saveCustomer") && (method === "POST") && (contentType === "application/json")) await saveItem(CUSTOMER_TYPE, request, response);
-  else if (url.startsWith("/pinCustomer/") && (method === "PUT")) await pinItem(CUSTOMER_TYPE, request, response, path.basename(url));
-  else if (url.startsWith("/deleteCustomer/") && (method === "DELETE")) await deleteItem(CUSTOMER_TYPE, request, response, path.basename(url));
-  else if ((url === "/contacts") && (method === "GET")) await getItems(CONTACT_TYPE, request, response);
-  else if (url.startsWith("/getContact/") && (method === "GET")) await getItem(CONTACT_TYPE, request, response, path.basename(url));
-  else if ((url === "/saveContact") && (method === "POST") && (contentType === "application/json")) await saveContact(request, response);
-  else if (url.startsWith("/answerContact/") && (method === "PUT") && (contentType === "application/json")) await answerContact(request, response, path.basename(url));
-  else if (url.startsWith("/deleteContact/") && (method === "DELETE")) await deleteItem(CONTACT_TYPE, request, response, path.basename(url));
-  else if (url.startsWith("/js/") && (method === "GET") && isStaticFileAllowed(url, "js", [".js"])) getJsFile(response, path.basename(url));
-  else if (url.startsWith("/utilities/") && (method === "GET") && isStaticFileAllowed(url, "utilities", [".js"])) getUtilityFile(response, path.basename(url));
-  else if (url.startsWith("/css/") && (method === "GET") && isStaticFileAllowed(url, "css", [".css"])) getCssFile(response, path.basename(url));
-  else if (url.startsWith("/images/") && (method === "GET") && isStaticFileAllowed(url, "images", [".png", ".jpg", ".jpeg"])) getImageFile(response, path.basename(url));
-  else if ((url === "/favicon.ico") && (method === "GET")) getFaviconFile(response);
-  else if ((url === "/unauthorized") && (method === "GET")) getNoAccessFile(response, true);
-  else getNoAccessFile(response);
+  const { url: requestUrl, method, headers: { "content-type": contentType } } = request;
+  const url = new URL(requestUrl, "http://localhost");
+  const { pathname, searchParams } = url;
+  if (pathname.endsWith(".php")) return response.writeHead(404, { "Content-Type": "text/plain" }).end("File not found.");
+  const methodRoutes = routes[method];
+  if (!methodRoutes) return response.writeHead(405, { "Content-Type": "text/plain" }).end("Method not allowed.");
+  for (const route of methodRoutes) {
+    const { path, queryParameters, applicationJson } = route;
+    if (path !== pathname) continue;
+    if (queryParameters) {
+      if (!areQueryParametersValid(searchParams, queryParameters)) continue;
+    } else if (searchParams.size > 0) {
+      continue;
+    }
+    if (applicationJson && !isContentTypeValid(contentType)) continue;
+    return await route.handler(request, response);
+  }
+  for (const route of methodRoutes) {
+    const { base, applicationJson } = route;
+    if (!base) continue;
+    const id = getId(url, base);
+    if (!id) continue;
+    if (applicationJson && !isContentTypeValid(contentType)) continue;
+    return await route.handler(request, response, id);
+  }
+  if (searchParams.size === 0) {
+    if (pathname.startsWith("/js/") && (method === "GET") && isStaticFileAllowed(url, "js", [".js"])) return getJsFile(response, path.basename(pathname));
+    if (pathname.startsWith("/utilities/") && (method === "GET") && isStaticFileAllowed(url, "utilities", [".js"])) return getUtilityFile(response, path.basename(pathname));
+    if (pathname.startsWith("/css/") && (method === "GET") && isStaticFileAllowed(url, "css", [".css"])) return getCssFile(response, path.basename(pathname));
+    if (pathname.startsWith("/images/") && (method === "GET") && isStaticFileAllowed(url, "images", [".png", ".jpg", ".jpeg"])) return getImageFile(response, path.basename(pathname));
+  }
+  if (pathname === "/favicon.ico") return getFaviconFile(response);
+  if (pathname === "/unauthorized") return getNoAccessFile(response, true);
+  return getNoAccessFile(response);
 });
 
 server.listen(PORT, () => console.log(`Curriculum Vitae running on: ${BASE_URL}.`));
