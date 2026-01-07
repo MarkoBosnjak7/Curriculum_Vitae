@@ -20,8 +20,8 @@ await connect();
 
 const routes = {
   GET: [
-    { path: "/", queryParameters: ["language"], handler: (request, response) => getAbout(ABOUT_TYPE, request, response) },
-    { path: "/download", queryParameters: ["language"], handler: (request, response) => getAbout(DOWNLOAD_TYPE, request, response) },
+    { path: "/", queryParameters: ["language"], handler: (response, isGerman) => getAbout(ABOUT_TYPE, response, isGerman) },
+    { path: "/download", queryParameters: ["language"], handler: (response, isGerman) => getAbout(DOWNLOAD_TYPE, response, isGerman) },
     { path: "/login", handler: getLogin },
     { path: "/logoutUser", handler: logoutUser },
     { path: "/authentication", handler: getAuthentication },
@@ -91,6 +91,7 @@ server.on("request", async (request, response) => {
     }
     if (applicationJson && !isContentTypeValid(contentType)) continue;
     if (path === "/logoutUser") return await route.handler(response);
+    else if (((path === "/") || (path === "/download")) && queryParameters.includes("language")) return await route.handler(response, searchParams.get("language") === "de");
     else return await route.handler(request, response);
   }
   for (const route of methodRoutes) {

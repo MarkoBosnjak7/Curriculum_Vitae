@@ -1,14 +1,13 @@
 import fs from "fs";
 import path from "path";
 import { getAdministrator, getItemsDB } from "../utilities/database.js";
-import { addVariablesToHtml, getLanguage, getFilteredItems } from "../utilities/scripts.js";
+import { addVariablesToHtml, getFilteredItems } from "../utilities/scripts.js";
 import { isLinkValid, isArrayValid, isObjectValid, isProfileValid } from "../utilities/validations.js";
 import { ABOUT_TYPE, SKILL_TYPE, RESUME_ITEM_TYPE, PORTFOLIO_ITEM_TYPE, CERTIFICATION_TYPE } from "../utilities/types.js";
 import { DATE_FORMAT } from "../utilities/constants.js";
 
-export const getAbout = async (type, request, response) => {
+export const getAbout = async (type, response, isGerman) => {
   const isAbout = (type === ABOUT_TYPE);
-  const isGerman = getLanguage(request);
   const promises = isAbout ? [getAdministrator(), getItemsDB(SKILL_TYPE), getItemsDB(RESUME_ITEM_TYPE), getItemsDB(CERTIFICATION_TYPE), getItemsDB(PORTFOLIO_ITEM_TYPE)] : [getAdministrator(), getItemsDB(SKILL_TYPE), getItemsDB(RESUME_ITEM_TYPE), getItemsDB(CERTIFICATION_TYPE)];
   let [user, skills, resume, certifications, portfolio] = await Promise.all(promises);
   if (isAbout) {

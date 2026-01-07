@@ -137,14 +137,6 @@ export const handleApplicationJson = (request) => {
   });
 };
 
-export const getLanguage = (request) => {
-  const { url, headers } = request;
-  const protocol = headers["x-forwarded-proto"] || "http";
-  const { host } = headers;
-  const newUrl = new URL(url, `${protocol}://${host}`);
-  return newUrl.searchParams.get("language") === "de";
-};
-
 export const getFilteredItems = (items, type) => items.filter((item) => item.type === type);
 
 export const isStaticFileAllowed = (url, folder, allowedExtensions) => {
