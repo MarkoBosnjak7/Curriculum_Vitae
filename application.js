@@ -90,7 +90,8 @@ server.on("request", async (request, response) => {
       continue;
     }
     if (applicationJson && !isContentTypeValid(contentType)) continue;
-    return await route.handler(request, response);
+    if (path === "/logoutUser") return await route.handler(response);
+    else return await route.handler(request, response);
   }
   for (const route of methodRoutes) {
     const { base, applicationJson } = route;
