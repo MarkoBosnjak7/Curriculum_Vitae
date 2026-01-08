@@ -22,6 +22,7 @@ export const saveItem = async (type, request, response) => {
     try {
       let errors = [];
       let data = await handleApplicationJson(request);
+      const id = data?.id;
       if (type === SKILL_TYPE) {
         const { title, type, logo } = data;
         if (!isTextValid(title)) errors = [...errors, "Title"];
@@ -56,7 +57,7 @@ export const saveItem = async (type, request, response) => {
       if (!isTextValid(errors) && !isArrayValid(errors)) {
         const item = await saveItemDB(type, data);
         if (isObjectValid(item)) {
-          return response.writeHead(200, { "Content-Type": "application/json" }).end(JSON.stringify(item));
+          return response.writeHead(isObjectIdValid(id) ? 200 : 201, { "Content-Type": "application/json" }).end(JSON.stringify(item));
         } else {
           errors = [...errors, "Item ID"];
         }
