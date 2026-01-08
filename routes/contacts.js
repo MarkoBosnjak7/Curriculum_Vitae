@@ -16,9 +16,8 @@ export const saveContact = async (request, response) => {
     if (!isTextValid(message)) errors = [...errors, "Message"];
     if (!(await isReCaptchaTokenValid(reCaptchaToken))) errors = [...errors, "ReCaptcha token"];
     if (!isArrayValid(errors)) {
-      const timestamp = Date.now();
-      await saveContactDB(name, email, subject, message, isGerman, timestamp);
-      return response.writeHead(200, { "Content-Type": "application/json" }).end(JSON.stringify({ message: isGerman ? "Vielen Dank für Ihre Nachricht. Ich werde mich schnellstmöglich bei Ihnen zurückmelden." : "Thank you for your message. I will get back to you as soon as possible." }));
+      await saveContactDB(name, email, subject, message, isGerman, Date.now());
+      return response.writeHead(201, { "Content-Type": "application/json" }).end(JSON.stringify({ message: isGerman ? "Vielen Dank für Ihre Nachricht. Ich werde mich schnellstmöglich bei Ihnen zurückmelden." : "Thank you for your message. I will get back to you as soon as possible." }));
     } else {
       return response.writeHead(400, { "Content-Type": "application/json" }).end(JSON.stringify({ message: errors }));
     }
