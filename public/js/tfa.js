@@ -16,8 +16,10 @@ const generateQrCode = async () => {
   const { message } = await response.json();
   if (ok) {
     document.getElementById("qrCode").src = message;
-    document.getElementById("token").value = "";
+    const token = document.getElementById("token");
+    token.value = "";
     document.getElementById("tfaForm").classList.remove("none");
+    token.focus();
   } else {
     showBanner(message, "error");
   }
