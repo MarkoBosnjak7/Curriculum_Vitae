@@ -90,9 +90,9 @@ server.on("request", async (request, response) => {
       continue;
     }
     if (applicationJson && !isContentTypeValid(contentType)) continue;
-    if (path === "/logoutUser") return await route.handler(response);
-    else if (((path === "/") || (path === "/download")) && queryParameters.includes("language")) return await route.handler(response, searchParams.get("language") === "de");
-    else return await route.handler(request, response);
+    if (path === "/logoutUser") return route.handler(response);
+    else if (((path === "/") || (path === "/download")) && queryParameters.includes("language")) return route.handler(response, searchParams.get("language") === "de");
+    else return route.handler(request, response);
   }
   for (const route of methodRoutes) {
     const { base, applicationJson } = route;
@@ -100,7 +100,7 @@ server.on("request", async (request, response) => {
     const id = getId(url, base);
     if (!id) continue;
     if (applicationJson && !isContentTypeValid(contentType)) continue;
-    return await route.handler(request, response, id);
+    return route.handler(request, response, id);
   }
   if (searchParams.size === 0) {
     if (pathname.startsWith("/js/") && (method === "GET") && isStaticFileAllowed(url, "js", [".js"])) return getJsFile(response, path.basename(pathname));
